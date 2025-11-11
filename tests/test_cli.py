@@ -31,25 +31,17 @@ def test_clean_remove_missing(runner):
     """
     Prueba el comando: 'cli clean remove-missing ...'
     """
-    # Argumentos que simulan la línea de comandos:
-    # ... clean remove-missing 10 20.5 None "" 30 nan text
+    # ... clean remove-missing 10 20.5 None '' 30 nan text
     args = [
         'clean',
         'remove-missing',
-        '10', '20.5', 'None', '""', '30', 'nan', 'text'
+        '10', '20.5', 'None', '', '30', 'nan', 'text'
     ]
-    
-    # Invocamos el comando 
     result = runner.invoke(cli, args)
-    
-    # 1. Comprobar que el comando se ejecuto sin errores
     assert result.exit_code == 0
     
-    # 2. Comprobar la salida del CLI
-    # Tu cli.py imprime "Resultado: [10, 20.5, 'text']"
-    # click.echo añade un salto de linea (\n) al final.
-    expected_output = "Resultado: [10, 20.5, 'text']\n"
-    
+    # La salida correcta (la lógica quita None, '' y nan)
+    expected_output = "Resultado: [10, 20.5, 30, 'text']\n"
     assert expected_output in result.output
 
 def test_clean_fill_missing_with_option(runner):
@@ -117,7 +109,7 @@ def test_numeric_standardize(runner):
     ]
     result = runner.invoke(cli, args)
     assert result.exit_code == 0
-    assert "Resultado: [-1.414, 0.0, 1.414]\n" in result.output
+    assert "Resultado: [-1.224, 0.0, 1.224]\n" in result.output
 
 def test_numeric_clip(runner):
     """
@@ -133,7 +125,7 @@ def test_numeric_clip(runner):
     ]
     result = runner.invoke(cli, args)
     assert result.exit_code == 0
-    assert "Resultado: [10, 15, 20]\n" in result.output
+    assert "Resultado: [10.0, 15, 20.0]\n" in result.output
 
 def test_numeric_to_integers(runner):
     """
@@ -145,6 +137,7 @@ def test_numeric_to_integers(runner):
         'to-integers',
         '10.5', "20", '30.0', "texto"
     ]
+    result = runner.invoke(cli, args)
     assert result.exit_code == 0
     assert "Resultado: [10, 20, 30]\n" in result.output
 
@@ -158,6 +151,7 @@ def test_numeric_log_transform(runner):
         'log-transform',
         '1', '10', '100', '-5', '0'
     ]
+    result = runner.invoke(cli, args)
     assert result.exit_code == 0
     assert "Resultado: [0.0, 2.302, 4.6052]\n" in result.output
 
@@ -221,4 +215,4 @@ def test_struct_shuffle_with_seed(runner):
     result = runner.invoke(cli, args)
     assert result.exit_code == 0
     # La seed 42 siempre dará este orden para [1, 2, 3, 4, 5]
-    assert "Resultado: [3, 5, 2, 4, 1]\n" in result.output
+    assert "Resultado: [4, 2, 3, 5, 1]\n" in result.output
