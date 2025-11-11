@@ -1,20 +1,21 @@
 # Imports
 import click
 from numpy import nan
-import src.preprocessing as pp # Importamos el preprocessing
+import src.preprocessing as pp  # Importamos el preprocessing
 from typing import List, Any
 
-# 1. Función Ayudante (Helper) 
+# 1. Función Ayudante (Helper)
 # La terminal solo nos da strings. Necesitamos una función que convierta
 # "10.5" a 10.5 (float), "None" a None, "nan" a nan, etc.
+
 
 def process_input_list(str_list: tuple) -> List[Any]:
     """Convierte una tupla de strings de la CLI a una lista con tipos."""
     processed = []
     for item in str_list:
-        if item.lower() == 'none':
+        if item.lower() == "none":
             processed.append(None)
-        elif item.lower() == 'nan':
+        elif item.lower() == "nan":
             processed.append(nan)
         elif item == "":
             processed.append("")
@@ -32,6 +33,7 @@ def process_input_list(str_list: tuple) -> List[Any]:
                 processed.append(item)
     return processed
 
+
 def process_input_value(str_val: str) -> Any:
     """Convierte un solo string de la CLI a su tipo Python."""
     # Reutilizamos la función de lista para procesar un solo elemento
@@ -46,13 +48,17 @@ def cli():
     """
     pass
 
-# 3. Subgrupo 'clean' 
+
+# 3. Subgrupo 'clean'
 @cli.group(help="Funciones relacionadas con la limpieza de datos.")
 def clean():
     pass
 
+
 @clean.command(help="Elimina valores faltantes (None, '', nan) de una lista.")
-@click.argument("data", nargs=-1, required=True) # nargs=-1 = acepta múltiples argumentos
+@click.argument(
+    "data", nargs=-1, required=True
+)  # nargs=-1 = acepta múltiples argumentos
 def remove_missing(data: tuple):
     """
     Elimina valores faltantes (None, '', nan) de una lista.
@@ -64,13 +70,16 @@ def remove_missing(data: tuple):
     result = pp.remove_missing_values(processed_data)
     click.echo(f"Resultado: {result}")
 
+
 @clean.command(help="Rellena valores faltantes con un valor específico.")
-@click.argument("data", nargs=-1, required=True)#Aqui pasamos los argumentos de la funcion
+@click.argument(
+    "data", nargs=-1, required=True
+)  # Aqui pasamos los argumentos de la funcion
 @click.option(
     "--fill-value",
-    default="0", # El default es 0, pero lo pasamos como string
+    default="0",  # El default es 0, pero lo pasamos como string
     type=str,
-    help="Valor para rellenar los faltantes."
+    help="Valor para rellenar los faltantes.",
 )
 def fill_missing(data: tuple, fill_value: str):
     """
@@ -81,10 +90,13 @@ def fill_missing(data: tuple, fill_value: str):
     uv run python src/cli.py clean fill-missing 10 20 None --fill-value "NA"
     """
     processed_data = process_input_list(data)
-    processed_fill_value = process_input_value(fill_value) # Procesamos el valor de relleno
-    
+    processed_fill_value = process_input_value(
+        fill_value
+    )  # Procesamos el valor de relleno
+
     result = pp.filling_missing_values(processed_data, processed_fill_value)
     click.echo(f"Resultado: {result}")
+
 
 @clean.command(help="Elimina valores duplicados de una lista.")
 @click.argument("data", nargs=-1, required=True)
@@ -99,10 +111,12 @@ def unique(data: tuple):
     result = pp.remove_duplicated_values(processed_data)
     click.echo(f"Resultado: {result}")
 
+
 # 4. Subgrupo 'numeric'
 @cli.group(help="Funciones relacionadas con datos numéricos.")
 def numeric():
     pass
+
 
 @numeric.command(help="Normaliza valores numéricos (Min-Max).")
 @click.argument("data", nargs=-1, required=True)
@@ -119,6 +133,7 @@ def normalize(data: tuple, min_val: float, max_val: float):
     result = pp.normalize_min_max(processed_data, min_val, max_val)
     click.echo(f"Resultado: {result}")
 
+
 @numeric.command(help="Estandariza valores numéricos (Z-Score).")
 @click.argument("data", nargs=-1, required=True)
 def standardize(data: tuple):
@@ -131,6 +146,7 @@ def standardize(data: tuple):
     processed_data = process_input_list(data)
     result = pp.standardize_z_score(processed_data)
     click.echo(f"Resultado: {result}")
+
 
 @numeric.command(help="Recorta valores numéricos a un rango.")
 @click.argument("data", nargs=-1, required=True)
@@ -147,6 +163,7 @@ def clip(data: tuple, min_val: float, max_val: float):
     result = pp.clip_values(processed_data, min_val, max_val)
     click.echo(f"Resultado: {result}")
 
+
 @numeric.command(help="Convierte strings a enteros.")
 @click.argument("data", nargs=-1, required=True)
 def to_integers(data: tuple):
@@ -161,6 +178,7 @@ def to_integers(data: tuple):
     result = pp.convert_to_integers(list(data))
     click.echo(f"Resultado: {result}")
 
+
 @numeric.command(help="Aplica transformación logarítmica.")
 @click.argument("data", nargs=-1, required=True)
 def log_transform(data: tuple):
@@ -174,10 +192,12 @@ def log_transform(data: tuple):
     result = pp.logarithmic_transform(processed_data)
     click.echo(f"Resultado: {result}")
 
+
 # 5. Subgrupo 'text'
 @cli.group(help="Funciones para procesar información textual.")
 def text():
     pass
+
 
 @text.command(help="Tokeniza texto (alfanuméricos y minúsculas).")
 @click.argument("text_input", type=str)
@@ -190,6 +210,7 @@ def tokenize(text_input: str):
     """
     result = pp.tokenize_text(text_input)
     click.echo(f"Resultado: {result}")
+
 
 @text.command(help="Selecciona solo alfanuméricos y espacios.")
 @click.argument("text_input", type=str)
@@ -204,13 +225,14 @@ def remove_punctuation(text_input: str):
     result = pp.select_alphanumeric_spaces(text_input)
     click.echo(f"Resultado: {result}")
 
+
 @text.command(help="Elimina stop-words de un texto.")
 @click.argument("text_input", type=str)
 @click.option(
     "--stop-word",
-    "stop_words", # Nombre de la variable en la función
-    multiple=True, # Permite usar la opción varias veces
-    help="Palabra a eliminar (usar varias veces para una lista)."
+    "stop_words",  # Nombre de la variable en la función
+    multiple=True,  # Permite usar la opción varias veces
+    help="Palabra a eliminar (usar varias veces para una lista).",
 )
 def remove_stops(text_input: str, stop_words: tuple):
     """
@@ -229,18 +251,19 @@ def remove_stops(text_input: str, stop_words: tuple):
 def struct():
     pass
 
+
 @struct.command(help="Aplana una lista de listas.")
 @click.argument("data", nargs=-1, required=True)
 def flatten(data: tuple):
     """
     Aplana una lista mixta de elementos y listas.
-    
+
     NOTA: Para pasar una lista anidada, usamos una sintaxis
     especial de 'click' o la simulamos. Click no soporta
     listas anidadas fácilmente. Este comando asume que la entrada
     ya es una lista (procesada por nuestro helper).
     Para probarlo, simulamos la estructura desde la lógica.
-    
+
     Este comando es difícil de probar desde CLI.
     La función 'process_input_list' aplana la entrada por defecto.
     uv run python src/cli.py struct flatten 1 2 3
@@ -255,7 +278,7 @@ def flatten(data: tuple):
     # una lista anidada.
     simulated_nested_list = [processed_data[:2], processed_data[2:]]
     click.echo(f"(Entrada simulada: {simulated_nested_list})")
-    
+
     result = pp.flatten_list(simulated_nested_list)
     click.echo(f"Resultado: {result}")
 
@@ -264,9 +287,9 @@ def flatten(data: tuple):
 @click.argument("data", nargs=-1, required=True)
 @click.option(
     "--seed",
-    default=None, # El default es None
+    default=None,  # El default es None
     type=int,
-    help="Semilla para reproducibilidad (default: None)."
+    help="Semilla para reproducibilidad (default: None).",
 )
 def shuffle(data: tuple, seed: int):
     """
@@ -280,6 +303,6 @@ def shuffle(data: tuple, seed: int):
     click.echo(f"Resultado: {result}")
 
 
-# 7. Punto de Entrada 
-if __name__ == '__main__':
+# 7. Punto de Entrada
+if __name__ == "__main__":
     cli()
