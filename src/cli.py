@@ -4,7 +4,7 @@ from numpy import nan
 import src.preprocessing as pp # Importamos el preprocessing
 from typing import List, Any
 
-# --- 1. Función Ayudante (Helper) ---
+# 1. Función Ayudante (Helper) 
 # La terminal solo nos da strings. Necesitamos una función que convierta
 # "10.5" a 10.5 (float), "None" a None, "nan" a nan, etc.
 
@@ -38,7 +38,7 @@ def process_input_value(str_val: str) -> Any:
     return process_input_list((str_val,))[0]
 
 
-# --- 2. Grupo Principal 'cli' ---
+# 2. Grupo Principal 'cli'
 @click.group()
 def cli():
     """
@@ -46,7 +46,7 @@ def cli():
     """
     pass
 
-# --- 3. Subgrupo 'clean' ---
+# 3. Subgrupo 'clean' 
 @cli.group(help="Funciones relacionadas con la limpieza de datos.")
 def clean():
     pass
@@ -99,7 +99,7 @@ def unique(data: tuple):
     result = pp.remove_duplicated_values(processed_data)
     click.echo(f"Resultado: {result}")
 
-# --- 4. Subgrupo 'numeric' ---
+# 4. Subgrupo 'numeric'
 @cli.group(help="Funciones relacionadas con datos numéricos.")
 def numeric():
     pass
@@ -174,7 +174,7 @@ def log_transform(data: tuple):
     result = pp.logarithmic_transform(processed_data)
     click.echo(f"Resultado: {result}")
 
-# --- 5. Subgrupo 'text' ---
+# 5. Subgrupo 'text'
 @cli.group(help="Funciones para procesar información textual.")
 def text():
     pass
@@ -224,7 +224,7 @@ def remove_stops(text_input: str, stop_words: tuple):
     click.echo(f"Resultado: {result}")
 
 
-# --- 6. Subgrupo 'struct' ---
+# 6. Subgrupo 'struct'
 @cli.group(help="Funciones relacionadas con la estructura de datos.")
 def struct():
     pass
@@ -280,6 +280,6 @@ def shuffle(data: tuple, seed: int):
     click.echo(f"Resultado: {result}")
 
 
-# --- 7. Punto de Entrada ---
+# 7. Punto de Entrada 
 if __name__ == '__main__':
     cli()
