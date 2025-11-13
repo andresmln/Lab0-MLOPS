@@ -1,11 +1,8 @@
 # Imports
 import math
-from numpy import (
-    nan,
-)  # Usamos numpy.nan para compatibilidad, aunque math.nan también vale
-import re
 import random
-from typing import Any  # Necesario para el type hint de fill_value
+import re
+from typing import Any 
 
 
 def remove_missing_values(data: list) -> list:
@@ -99,7 +96,7 @@ def remove_duplicated_values(data: list) -> list:
 
 
 #
-# --- 2. FUNCIONES NUMÉRICAS (Numeric) ---
+#  2. FUNCIONES NUMÉRICAS (Numeric)
 #
 
 
@@ -252,7 +249,7 @@ def logarithmic_transform(data: list) -> list:
 
 
 #
-# --- 3. FUNCIONES DE TEXTO (Text) ---
+# 3. FUNCIONES DE TEXTO (Text)
 #
 
 

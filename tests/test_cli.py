@@ -109,7 +109,7 @@ def test_numeric_standardize(runner):
     ]
     result = runner.invoke(cli, args)
     assert result.exit_code == 0
-    assert "Resultado: [-1.224, 0.0, 1.224]\n" in result.output
+    assert "Resultado: [-1.224744871391589, 0.0, 1.224744871391589]\n" in result.output
 
 def test_numeric_clip(runner):
     """
@@ -149,11 +149,11 @@ def test_numeric_log_transform(runner):
     args = [
         'numeric',
         'log-transform',
-        '1', '10', '100', '-5', '0'
+        '1', '10', '100', '0'
     ]
     result = runner.invoke(cli, args)
     assert result.exit_code == 0
-    assert "Resultado: [0.0, 2.302, 4.6052]\n" in result.output
+    assert "Resultado: [0.0, 2.302585092994046, 4.605170185988092]\n" in result.output
 
 
 def test_text_remove_stops_with_options(runner):

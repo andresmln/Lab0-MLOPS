@@ -1,13 +1,19 @@
+"""
+CLI (Command Line Interface) module for the project.
+
+Defines the command and group structure using 'click'
+to interact with the functions from 'preprocessing.py'.
+"""
+
 # Imports
-import click
-from numpy import nan
-import src.preprocessing as pp  # Importamos el preprocessing
 from typing import List, Any
 
-# 1. Función Ayudante (Helper)
-# La terminal solo nos da strings. Necesitamos una función que convierta
-# "10.5" a 10.5 (float), "None" a None, "nan" a nan, etc.
+import click
+from numpy import nan
 
+import src.preprocessing as pp  # Importamos el preprocessing
+
+# 1. Función Ayudante (Helper)
 
 def process_input_list(str_list: tuple) -> List[Any]:
     """Convierte una tupla de strings de la CLI a una lista con tipos."""

@@ -4,7 +4,7 @@ from numpy import nan # Importamos nan para los casos de prueba
 from src.preprocessing import * # Importamos todas las funciones que vamos a probar
 # Usamos @pytest.mark.parametrize para probar múltiples casos
 # Aquí probamos con 'input_list' y 'expected_output'
-# --- 1. Fixture Requerido  ---
+# --- 1. Fixture Requerido  
 @pytest.fixture
 def sample_numeric_list():
     """
